@@ -1,0 +1,61 @@
+[
+    // Filter client budget between 200k and 400k
+    {
+        "budget": {
+            "$gte": 200000,
+            "$lte": 400000
+        }
+    },
+    // Filter properties by propery type
+    {
+        "type": "Apartment"
+    },
+    // Filter by transaction type
+    {
+        "type": "Sale"
+    },
+    // FIlter rating greater than 4
+    {
+        "rating": {
+            "$gte": 4
+        }
+    },
+    // Filter by property feature
+    {
+        "featureName": "Swimming Pool"
+    },
+    // Group properties by type and count the number of properties in each type
+    [
+        {
+            "$group": {
+                "_id": "$type",
+                "count": {
+                    "$sum": 1
+                }
+            }
+        }
+    ],
+    // Find the clients who have the highest budget
+    [
+        {
+            "$sort": {
+                "budget": -1
+            }
+        },
+        {
+            "$limit": 5
+        }
+    ],
+    // Calculate the average rating of property reviews
+    [
+        {
+            "$group": {
+                "_id": null,
+                "averageRating": {
+                    "$avg": "$rating"
+                }
+            }
+        }
+    ]
+    
+]
